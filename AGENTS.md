@@ -173,13 +173,38 @@ When adding tests:
 - Place tests alongside source files or in `tests/` directory
 - Run single test: `bun vitest run -t "test name"`
 
-## Linting
+## Linting & Formatting
 
-**No ESLint/Prettier configured.**
-Before committing, run:
+This project uses **Biome** for both linting and formatting.
+
+Always run the full check suite:
 ```bash
-bun run check    # Type check all files
+bun run check:all    # Run all checks: types, format, lint
 ```
+
+### Individual Commands
+
+```bash
+# Formatting
+bun run format         # Format all files (writes changes)
+bun run format:check   # Check formatting without writing
+
+# Linting
+bun run lint           # Check for linting errors
+bun run lint:fix       # Fix auto-fixable linting errors
+
+# Type checking only
+bun run check          # Type check all files
+
+# All checks (recommended before committing)
+bun run check:all      # Types + format check + lint
+```
+
+### Zed IDE Configuration
+
+The project includes `.zed/settings.json` for automatic formatting on save using Biome.
+
+**Note:** Biome has experimental Svelte support. Some lint rules are disabled for `.svelte` files to prevent false positives (e.g., `noUnusedVariables`, `noUnusedImports`).
 
 ## OpenCode Integration
 

@@ -1,20 +1,20 @@
 {
-  "extends": "./.svelte-kit/tsconfig.json",
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "allowJs": true,
-    "checkJs": true,
-    "isolatedModules": true,
-    "verbatimModuleSyntax": true,
-    "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "types": ["bun-types"]
-  },
-  "include": ["src/**/*", "src/**/*.svelte"]
+	"extends": "./.svelte-kit/tsconfig.json",
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"allowJs": true,
+		"checkJs": true,
+		"isolatedModules": true,
+		"verbatimModuleSyntax": true,
+		"lib": ["ESNext", "DOM", "DOM.Iterable"],
+		"types": ["bun-types"]
+	},
+	"include": ["src/**/*", "src/**/*.svelte"]
 }

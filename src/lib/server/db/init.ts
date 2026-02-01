@@ -30,10 +30,12 @@ CREATE TABLE IF NOT EXISTS seeds (
 CREATE TABLE IF NOT EXISTS research_jobs (
   id TEXT PRIMARY KEY,
   seed_id TEXT NOT NULL REFERENCES seeds(id) ON DELETE CASCADE,
-  job_type TEXT NOT NULL CHECK(job_type IN ('market', 'competitor', 'failure', 'synthesis')),
+  job_type TEXT NOT NULL CHECK(job_type IN ('market', 'competitor', 'failure', 'synthesis', 'webfetch')),
   status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending', 'running', 'completed', 'failed', 'cancelled')),
   result TEXT,
   error TEXT,
+  session_id TEXT,
+  opencode_session_id TEXT,
   created_at INTEGER DEFAULT (unixepoch()) NOT NULL,
   started_at INTEGER,
   completed_at INTEGER

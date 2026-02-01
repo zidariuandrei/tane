@@ -1,28 +1,28 @@
 <script>
-  let seedInput = $state('');
-  let isPlanting = $state(false);
-  
-  async function plantSeed() {
-    if (!seedInput.trim()) return;
-    
-    isPlanting = true;
-    try {
-      const response = await fetch('/api/seeds', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: seedInput })
-      });
-      
-      if (response.ok) {
-        seedInput = '';
-        // TODO: Refresh seed list
-      }
-    } catch (error) {
-      console.error('Failed to plant seed:', error);
-    } finally {
-      isPlanting = false;
-    }
-  }
+let seedInput = $state('');
+let isPlanting = $state(false);
+
+async function plantSeed() {
+	if (!seedInput.trim()) return;
+
+	isPlanting = true;
+	try {
+		const response = await fetch('/api/seeds', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ content: seedInput }),
+		});
+
+		if (response.ok) {
+			seedInput = '';
+			// TODO: Refresh seed list
+		}
+	} catch (error) {
+		console.error('Failed to plant seed:', error);
+	} finally {
+		isPlanting = false;
+	}
+}
 </script>
 
 <div class="min-h-screen">

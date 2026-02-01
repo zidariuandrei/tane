@@ -1,9 +1,9 @@
 {
-  "mcpServers": {
-    "svelte": {
-      "command": "bunx",
-      "args": ["-y", "@sveltejs/mcp"],
-      "env": {}
-    }
-  }
+	"mcpServers": {
+		"svelte": {
+			"command": "bunx",
+			"args": ["-y", "@sveltejs/mcp"],
+			"env": {}
+		}
+	}
 }
