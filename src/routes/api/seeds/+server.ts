@@ -1,6 +1,7 @@
 import { json } from '@sveltejs/kit';
 import { Database } from 'bun:sqlite';
 import { randomUUID } from 'node:crypto';
+import type { RequestEvent } from '@sveltejs/kit';
 
 const db = new Database('tane.db');
 
@@ -9,8 +10,8 @@ export async function GET() {
 	return json(seeds);
 }
 
-export async function POST({ request }) {
-	const { content } = await request.json();
+export async function POST(event: RequestEvent) {
+	const { content } = await event.request.json();
 
 	if (!content?.trim()) {
 		return json({ error: 'Content is required' }, { status: 400 });
@@ -24,8 +25,6 @@ export async function POST({ request }) {
 		'planted',
 		0,
 	]);
-
-	// TODO: Queue research jobs
 
 	return json({ id, content, status: 'planted' }, { status: 201 });
 }

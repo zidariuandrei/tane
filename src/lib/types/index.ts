@@ -1,14 +1,8 @@
-// Status lookup table
-export interface Status {
-	id: string;
-	name: string;
-}
-
 // Main seed entity representing startup ideas
 export interface Seed {
 	id: string;
 	content: string;
-	status_id: 'planted' | 'sprouting' | 'growing' | 'tree';
+	status: 'planted' | 'sprouting' | 'growing' | 'tree';
 	growth_score: number;
 	position_x: number;
 	position_y: number;
@@ -20,7 +14,7 @@ export interface Seed {
 export interface ResearchJob {
 	id: string;
 	seed_id: string;
-	job_type: 'market' | 'competitor' | 'failure' | 'synthesis';
+	job_type: 'market' | 'competitor' | 'failure' | 'synthesis' | 'webfetch';
 	status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
 	result?: string;
 	error?: string;
