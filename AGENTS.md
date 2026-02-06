@@ -1,225 +1,65 @@
-# AGENTS.md - Coding Guidelines for Tane
+# AGENTS.md
 
-## Build & Development Commands
+## Project Context: Tane (種)
 
-```bash
-# Development
-bun run dev              # Start dev server with hot reload
-bun run build            # Production build
-bun run preview          # Preview production build
+Tane is a digital garden and startup idea incubator. It allows users to "plant" ideas (Seeds), which are then "grown" (researched) by an autonomous AI agent into full reports.
 
-# Type Checking
-bun run check            # Run Svelte type check once
-bun run check:watch      # Run Svelte type check in watch mode
+## Architecture
 
-# Database
-bun run db:init          # Initialize SQLite database schema
-```
+- **Framework**: SvelteKit (Svelte 5)
+- **Language**: TypeScript
+- **Styling**: TailwindCSS v4 + Custom CSS Variables for theming.
+  - **Rule**: Use Tailwind utility classes whenever possible.
+  - **Exception**: Use custom CSS only for complex animations or specific "Herbarium" effects (like paper textures) defined in `DESIGN_SYSTEM.md`.
 
-**Note:** This project uses Bun as the runtime. All npm scripts use `bun --bun vite` prefix.
+## Database: SQLite (via `bun:sqlite`)
+- **Runtime**: Bun
 
-## Project Structure
+## Design System: "Herbarium"
 
-```
-src/
-├── routes/           # SvelteKit routes (pages & API)
-│   ├── +page.svelte  # Home page
-│   ├── +layout.svelte # Root layout
-│   └── api/          # API endpoints (+server.ts)
-├── lib/
-│   ├── types/        # TypeScript interfaces
-│   └── server/       # Server-side utilities (db, opencode)
-├── app.css           # Global styles with Tailwind v4
-└── app.html          # HTML template
-```
+We follow a strict "Botanical Journal" aesthetic.
+- **Theme**: Dark mode default ("Night Theme"), with high contrast but warm tones.
+- **Typography**:
+  - **Headings**: *Caveat* (Handwritten, organic)
+  - **Body**: *Crimson Text* (Serif, academic/journal style)
+- **Colors**:
+  - Backgrounds: Dark paper (`#2a2520`), Warm dark (`#3d3630`)
+  - Accents: Sage Fresh (`#87a878`), Sage Dried (`#6b7c5c`)
+  - Text: Ink Light (`#e8e0d0`)
+- **Visuals**: No generic UI. Use SVG icons (e.g., `PineSeed.svelte`), organic shapes, and paper textures.
 
-## Technology Stack
+## Agent Guidelines
 
-- **Framework:** SvelteKit 2.5+ with Svelte 5 (runes syntax)
-- **Runtime:** Bun (v1.3.8+)
-- **Styling:** Tailwind CSS 4.0+ with CSS-based configuration
-- **Database:** Bun SQLite (better-sqlite3 compatible)
-- **TypeScript:** Strict mode enabled
-- **Build Tool:** Vite 6
-- **UI Components:** shadcn-svelte ready (clsx, tailwind-merge installed)
+### 0. Core Principles
+*   **Keep It Simple**: Prefer simple, straightforward solutions over complex ones.
+*   **Don't Repeat Yourself**: Avoid code duplication through proper abstraction.
+*   **Testability**: Design components to be easily testable in isolation.
+*   **Design**: Keep the same style if one is already stated. Do not add any styling that may break the design language.
 
-## Code Style Guidelines
+### 1. Coding Standards (Svelte 5)
+*   **Reactivity**: Use Runes exclusively (`$state`, `$derived`, `$effect`, `$props`).
+*   **Events**: Use `onclick` props/attributes, NEVER `on:click`.
+*   **Slots**: Use Snippets (`{#snippet}`, `{@render}`) instead of `<slot>`.
+*   **Forms**: Use SvelteKit's `enhance` for progressive enhancement.
 
-### TypeScript
+### 2. File Operations
+*   **Paths**: Always use **RELATIVE** paths from the current working directory.
+*   **Edits**: Prefer `edit` for surgical changes to avoid overwriting unrelated code. Use `write` only for new files or complete refactors.
 
-- **Strict mode:** Always enabled. No implicit any.
-- **Types:** Define interfaces in `src/lib/types/`.
-- **Return types:** Explicit on public functions.
-- **Null checks:** Use optional chaining (`?.`) and nullish coalescing (`??`).
+### 3. Workflow
+*   **MVP Plan**: Refer to `MVP_PLAN.md` for the current roadmap and feature set.
+*   **Design**: Refer to `DESIGN_SYSTEM.md` for color tokens and utility classes.
 
-### Imports
+### 4. Common Tasks
+*   **New Components**: Create in `src/lib/components`. Ensure they accept `class` props for Tailwind merging.
+*   **Database**: Schema changes go in `src/lib/server/db.ts`.
 
-```typescript
-// Order: external libs → SvelteKit → $lib aliases → local
-import { json } from '@sveltejs/kit';
-import type { Database } from 'bun:sqlite';
-import type { Seed } from '$lib/types';
-import { TaneOpenCodeClient } from '$lib/server/opencode/client';
-```
+### 5. Quality Control
+After writing or modifying code, ALWAYS perform these checks:
+1.  **Format & Lint**: Run `biome check --apply .` (or specific files) to fix formatting and linting issues.
+2.  **Type Check**: Run `bun run check` to verify TypeScript and Svelte types.
+3.  **Verify**: Ensure no errors are reported before declaring the task complete.
 
-### Naming Conventions
-
-- **Files:** kebab-case (`+server.ts`, `opencode-client.ts`)
-- **Components:** PascalCase for Svelte components
-- **Variables/functions:** camelCase
-- **Classes:** PascalCase
-- **Constants:** UPPER_SNAKE_CASE
-- **Interfaces:** PascalCase with no prefix
-
-### Svelte 5 Runes
-
-Use the new runes syntax (not legacy `$:` reactive statements):
-
-```svelte
-<script>
-  let seedInput = $state('');
-  let isPlanting = $state(false);
-  
-  function plantSeed() {
-    if (!seedInput.trim()) return;
-    // ...
-  }
-</script>
-```
-
-### API Endpoints
-
-Structure in `src/routes/api/[resource]/+server.ts`:
-
-```typescript
-import { json } from '@sveltejs/kit';
-
-export async function GET() {
-  // Return json(data)
-}
-
-export async function POST({ request }) {
-  const body = await request.json();
-  // Validate, process, return json(result, { status: 201 })
-}
-```
-
-### Error Handling
-
-```typescript
-// Server endpoints: return JSON error with status
-try {
-  const result = await riskyOperation();
-  return json(result);
-} catch (error) {
-  return json({ error: 'Descriptive message' }, { status: 500 });
-}
-
-// Client-side: try/catch with console.error
-try {
-  await fetch('/api/seeds', { method: 'POST', body });
-} catch (error) {
-  console.error('Failed to plant seed:', error);
-}
-```
-
-### Database
-
-- Use Bun's native SQLite (`bun:sqlite`).
-- SQL parameters: Always use parameterized queries (`?` placeholders).
-- UUIDs: Use `randomUUID()` from `crypto`.
-- Timestamps: Use `unixepoch()` in SQLite.
-
-### Styling (Tailwind v4)
-
-- **Configuration:** CSS-based in `app.css` using `@theme` directive.
-- **No tailwind.config.js:** Tailwind v4 uses CSS-based config only.
-- **Colors:** Use stone-*, emerald-* palette (nature theme).
-- **Custom components:** Define in `app.css` with `@layer components`.
-
-```css
-@theme {
-  --color-stone-50: #fafaf9;
-  --color-emerald-600: #059669;
-}
-
-@layer components {
-  .btn-primary {
-    padding: 0.5rem 1rem;
-    background-color: var(--color-emerald-600);
-  }
-}
-```
-
-### Comments
-
-- Use `// TODO:` for temporary notes.
-- Explain complex business logic.
-- Keep comments concise and current.
-
-### Environment Variables
-
-Required for full functionality:
-```bash
-export SERPER_API_KEY=your_key     # Or BRAVE_API_KEY
-export OPENCODE_URL=http://localhost:4096  # Default OpenCode server
-```
-
-## Testing
-
-**No test framework currently configured.**
-When adding tests:
-- Consider Vitest (already used by Vite ecosystem)
-- Place tests alongside source files or in `tests/` directory
-- Run single test: `bun vitest run -t "test name"`
-
-## Linting & Formatting
-
-This project uses **Biome** for both linting and formatting.
-
-Always run the full check suite:
-```bash
-bun run check:all    # Run all checks: types, format, lint
-```
-
-### Individual Commands
-
-```bash
-# Formatting
-bun run format         # Format all files (writes changes)
-bun run format:check   # Check formatting without writing
-
-# Linting
-bun run lint           # Check for linting errors
-bun run lint:fix       # Fix auto-fixable linting errors
-
-# Type checking only
-bun run check          # Type check all files
-
-# All checks (recommended before committing)
-bun run check:all      # Types + format check + lint
-```
-
-### Zed IDE Configuration
-
-The project includes `.zed/settings.json` for automatic formatting on save using Biome.
-
-**Note:** Biome has experimental Svelte support. Some lint rules are disabled for `.svelte` files to prevent false positives (e.g., `noUnusedVariables`, `noUnusedImports`).
-
-## OpenCode Integration
-
-The app integrates with OpenCode server for AI research:
-- Client: `src/lib/server/opencode/client.ts`
-- Health check endpoint: `GET /api/opencode/status`
-- Ensure `opencode serve` is running on localhost:4096
-
-## shadcn-svelte
-
-Ready for shadcn-svelte components. Install with:
-```bash
-npx shadcn-svelte@next add button
-```
-
-Dependencies already installed: `clsx`, `tailwind-merge`.
-
-Allways run `bun run check` to verify that there are no compile time errors.
+## Skills & Tools
+*   **Skills**: `svelte5-best-practices`, `frontend-design`.
+*   **Tools**: Standard `pi` toolset (read, write, edit, bash).

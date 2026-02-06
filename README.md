@@ -1,58 +1,42 @@
-# Tane (種)
+# sv
 
-Your Idea Incubator. Drop a one-sentence seed and watch it grow into a full research dossier.
+Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
 
-## Prerequisites
+## Creating a project
 
-- [Bun](https://bun.sh) v1.3.8+
-- [OpenCode](https://opencode.ai) server running locally
-- Search API key (Serper, Brave, or SerpAPI)
+If you're seeing this, you've probably already done this step. Congrats!
 
-## Quick Start
-
-```bash
-# Install dependencies
-bun install
-
-# Initialize database
-bun run db:init
-
-# Start development server
-bun run dev
+```sh
+# create a new project
+npx sv create my-app
 ```
 
-## OpenCode Setup
+To recreate this project with the same configuration:
 
-Make sure you have OpenCode server running:
-
-```bash
-opencode serve
+```sh
+# recreate this project
+npx sv create --template minimal --types ts --no-install .
 ```
 
-Default URL: http://localhost:4096
+## Developing
 
-## Configuration
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
-Set your search API key in environment variables:
+```sh
+npm run dev
 
-```bash
-export SERPER_API_KEY=your_key_here
-# or
-export BRAVE_API_KEY=your_key_here
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
 ```
 
-## Features
+## Building
 
-- 🌱 **Seed Management**: Plant ideas as one-sentence seeds
-- 🔍 **Automated Research**: Background market, competitor, and failure analysis
-- 🌳 **Garden Visualization**: Watch seeds grow from seedlings to trees
-- 📄 **Dossier Export**: Export research as Markdown for Obsidian
-- 🤖 **OpenCode Integration**: Uses your authenticated LLM providers
+To create a production version of your app:
 
-## Project Structure
+```sh
+npm run build
+```
 
-See [PLAN.md](./PLAN.md) for detailed architecture and roadmap.
+You can preview the production build with `npm run preview`.
 
-## License
-
-MIT
+> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
