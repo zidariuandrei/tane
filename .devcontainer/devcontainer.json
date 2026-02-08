@@ -10,9 +10,12 @@
 			"username": "bun",
 			"upgradePackages": true
 		},
-		"ghcr.io/devcontainers/features/git:1": {}
+		"ghcr.io/devcontainers/features/git:1": {},
+		"ghcr.io/devcontainers/features/go:1": {
+			"version": "latest"
+		}
 	},
-	"postCreateCommand": "bun install",
+	"postCreateCommand": "sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y lazygit gcc libsqlite3-dev && bun install",
 	"shutdownAction": "stopCompose",
 	"remoteUser": "bun"
 }
