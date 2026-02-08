@@ -1,0 +1,18 @@
+{
+	"name": "Tane (SvelteKit + Bun + SearXNG)",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "app",
+	"workspaceFolder": "/workspace",
+	"forwardPorts": [5173, 8080],
+	"features": {
+		"ghcr.io/devcontainers/features/common-utils:2": {
+			"installZsh": true,
+			"username": "bun",
+			"upgradePackages": true
+		},
+		"ghcr.io/devcontainers/features/git:1": {}
+	},
+	"postCreateCommand": "bun install",
+	"shutdownAction": "stopCompose",
+	"remoteUser": "bun"
+}

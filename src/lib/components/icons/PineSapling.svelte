@@ -1,5 +1,5 @@
 <script>
-  let { class: className = "" } = $props();
+let { class: className = '' } = $props();
 </script>
 
 <svg 

@@ -11,7 +11,8 @@ db.run(`
     id TEXT PRIMARY KEY,
     content TEXT NOT NULL,
     status TEXT NOT NULL CHECK(status IN ('pending', 'processing', 'completed', 'failed')),
-    created_at INTEGER NOT NULL
+    created_at INTEGER NOT NULL,
+    plant_type TEXT NOT NULL DEFAULT 'pine' CHECK(plant_type IN ('pine', 'sakura', 'bamboo', 'fern', 'oak'))
   );
 `);
 

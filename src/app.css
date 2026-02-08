@@ -1,186 +1,169 @@
 @import "tailwindcss";
 
 @theme {
-  --font-handwritten: "Caveat", cursive;
-  --font-serif: "Crimson Text", serif;
+  --font-caveat: "Caveat", cursive;
+  --font-crimson: "Crimson Text", serif;
+  --font-roboto: "Roboto", sans-serif;
+  --font-mono: "Space Mono", monospace;
+  --font-merriweather: "Merriweather", serif;
 
-  /* Everforest Light Theme Colors */
-  --color-paper-cream: #fdf6e3;      /* Main background - Soft Cream */
-  --color-paper-warm: #efebd4;       /* Card background - Slightly darker cream */
-  --color-paper-shadow: #d3c6aa;     /* Shadows */
-
-  /* Everforest Dark Theme Colors */
-  --color-paper-dark: #2d353b;       /* Main background - Dark Green-Grey */
-  --color-paper-warm-dark: #343f44;  /* Card background - Lighter Green-Grey */
-
-  /* Text Colors */
-  --color-ink-dark: #5c6a72;         /* Light mode text - Deep Grey-Green */
-  --color-ink-light: #d3c6aa;        /* Dark mode text - Warm Grey-Beige */
-
-  /* Botanical/Everforest Accents (Shared/Adapted) */
-  --color-sage-fresh: #a7c080;       /* Green (Sprouting) - Everforest Green */
-  --color-sage-dried: #83c092;       /* Aqua/Teal (Accents) */
-  --color-moss-deep: #475258;        /* Deep Grey-Green (Headers) */
-  --color-mint-light: #d3c6aa;       /* Light highlights */
-
-  /* Growth Stages / Status Colors */
-  --color-sepia-light: #dbbc7f;      /* Planted (Seed) - Yellow */
-  --color-sepia-dark: #9da9a0;       /* Borders/Meta */
-  --color-bark-brown: #e69875;       /* Tree (Mature) - Orange */
-  --color-terracotta: #e67e80;       /* Red Accent */
-
-  --color-planted: #dbbc7f;          /* Yellow */
-  --color-sprouting: #a7c080;        /* Green */
-  --color-growing: #83c092;          /* Aqua */
-  --color-tree: #e69875;             /* Orange */
+  /* Aliases to allow dynamic switching via CSS vars */
+  --font-handwritten: var(--font-primary-heading);
+  --font-serif: var(--font-primary-body);
 }
 
 @layer base {
-  :root {
-    --paper-cream: var(--color-paper-cream);
-    --paper-warm: var(--color-paper-warm);
-    --paper-shadow: var(--color-paper-shadow);
-    --ink-dark: var(--color-ink-dark);
-    --ink-light: var(--color-ink-light);
+  /* ========================================= */
+  /* THEME: EVERFOREST (Default)               */
+  /* ========================================= */
+  :root, [data-theme="everforest"] {
+    --font-primary-heading: "Caveat", cursive;
+    --font-primary-body: "Crimson Text", serif;
 
-    --sage-fresh: var(--color-sage-fresh);
-    --sage-dried: var(--color-sage-dried);
-    --moss-deep: var(--color-moss-deep);
-    --mint-light: var(--color-mint-light);
-
-    --sepia-light: var(--color-sepia-light);
-    --sepia-dark: var(--color-sepia-dark);
-    --bark-brown: var(--color-bark-brown);
-    --terracotta: var(--color-terracotta);
-
-    --planted: var(--color-planted);
-    --sprouting: var(--color-sprouting);
-    --growing: var(--color-growing);
-    --tree: var(--color-tree);
-
-    --background: var(--paper-cream);
-    --foreground: var(--ink-dark);
+    /* Light Mode */
+    --color-paper-dark: #fdf6e3;        /* Main BG (Light) */
+    --color-paper-warm-dark: #efebd4;   /* Card BG (Light) */
+    --color-ink-light: #5c6a72;         /* Text (Light) */
+    
+    --color-sage-fresh: #8da101;        /* Green */
+    --color-sage-dried: #3a94c5;        /* Blue/Teal in light mode */
+    --color-sepia-light: #dfa000;       /* Yellow */
+    --color-bark-brown: #f57d26;        /* Orange */
+    --color-terracotta: #f85552;        /* Red */
+    --color-sprouting: #8da101;
+    --color-planted: #dfa000;
+    
+    /* Shadows/Extras */
+    --color-paper-shadow: #d3c6aa;
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --paper-cream: var(--color-paper-dark);
-      --paper-warm: var(--color-paper-warm-dark);
-      --ink-dark: var(--color-ink-light);
-      --ink-light: var(--color-ink-dark);
+  :root.dark, [data-theme="everforest"].dark {
+    /* Dark Mode (The "Herbarium" Look) */
+    --color-paper-dark: #2d353b;        /* Main BG */
+    --color-paper-warm-dark: #343f44;   /* Card BG */
+    --color-ink-light: #d3c6aa;         /* Text */
 
-      --sage-fresh: #a7c080;
-      --moss-deep: #d3c6aa; /* Light text for headers in dark mode */
+    --color-sage-fresh: #a7c080;
+    --color-sage-dried: #83c092;
+    --color-sepia-light: #dbbc7f;
+    --color-bark-brown: #e69875;
+    --color-terracotta: #e67e80;
+    --color-sprouting: #a7c080;
+    --color-planted: #dbbc7f;
+  }
 
-      --background: var(--paper-cream);
-      --foreground: var(--ink-dark);
-    }
+  /* ========================================= */
+  /* THEME: GRUVBOX                            */
+  /* ========================================= */
+  [data-theme="gruvbox"] {
+    --font-primary-heading: "Space Mono", monospace;
+    --font-primary-body: "Merriweather", serif;
+
+    /* Light Mode */
+    --color-paper-dark: #fbf1c7;
+    --color-paper-warm-dark: #ebdbb2;
+    --color-ink-light: #3c3836;
+
+    --color-sage-fresh: #98971a;
+    --color-sage-dried: #458588;
+    --color-sepia-light: #d79921;
+    --color-bark-brown: #d65d0e;
+    --color-terracotta: #cc241d;
+    --color-sprouting: #98971a;
+    --color-planted: #d79921;
+  }
+
+  [data-theme="gruvbox"].dark {
+    /* Dark Mode */
+    --color-paper-dark: #282828;        /* Hard Dark */
+    --color-paper-warm-dark: #3c3836;   /* Soft Dark */
+    --color-ink-light: #ebdbb2;         /* Light Text */
+
+    --color-sage-fresh: #b8bb26;        /* Bright Green */
+    --color-sage-dried: #8ec07c;        /* Aqua */
+    --color-sepia-light: #fabd2f;       /* Yellow */
+    --color-bark-brown: #fe8019;        /* Orange */
+    --color-terracotta: #fb4934;        /* Red */
+    --color-sprouting: #b8bb26;
+    --color-planted: #fabd2f;
+  }
+
+  /* ========================================= */
+  /* THEME: MINIMALIST (Shadcn-ish)            */
+  /* ========================================= */
+  [data-theme="minimalist"] {
+    --font-primary-heading: "Roboto", sans-serif;
+    --font-primary-body: "Roboto", sans-serif;
+
+    /* Light Mode */
+    --color-paper-dark: #ffffff;
+    --color-paper-warm-dark: #f4f4f5;   /* Zinc 100 */
+    --color-ink-light: #09090b;         /* Zinc 950 */
+
+    --color-sage-fresh: #10b981;        /* Emerald 500 */
+    --color-sage-dried: #0ea5e9;        /* Sky 500 */
+    --color-sepia-light: #f59e0b;       /* Amber 500 */
+    --color-bark-brown: #f97316;        /* Orange 500 */
+    --color-terracotta: #ef4444;        /* Red 500 */
+    --color-sprouting: #10b981;
+    --color-planted: #f59e0b;
+  }
+
+  [data-theme="minimalist"].dark {
+    /* Dark Mode */
+    --color-paper-dark: #09090b;        /* Zinc 950 */
+    --color-paper-warm-dark: #18181b;   /* Zinc 900 */
+    --color-ink-light: #fafafa;         /* Zinc 50 */
+
+    --color-sage-fresh: #34d399;        /* Emerald 400 */
+    --color-sage-dried: #38bdf8;        /* Sky 400 */
+    --color-sepia-light: #fbbf24;       /* Amber 400 */
+    --color-bark-brown: #fb923c;        /* Orange 400 */
+    --color-terracotta: #f87171;        /* Red 400 */
+    --color-sprouting: #34d399;
+    --color-planted: #fbbf24;
+  }
+
+  /* Shared Mappings */
+  :root {
+    --paper-cream: var(--color-paper-dark);      /* Map legacy light var */
+    --paper-warm: var(--color-paper-warm-dark);  /* Map legacy light var */
+    
+    /* Map all semantic names to the variables defined in themes */
+    --ink-dark: var(--color-ink-light); /* In light mode, this is dark text. In dark mode, we swap in body. */
+    
+    --sage-fresh: var(--color-sage-fresh);
+    --sage-dried: var(--color-sage-dried);
+    --sepia-light: var(--color-sepia-light);
+    --bark-brown: var(--color-bark-brown);
+    --terracotta: var(--color-terracotta);
+    
+    --planted: var(--color-planted);
+    --sprouting: var(--color-sprouting);
+    --growing: var(--color-sage-dried); /* Mapped to dried/aqua */
+    --tree: var(--color-bark-brown);
   }
 
   body {
-    background-color: var(--background);
-    color: var(--foreground);
-    font-family: var(--font-serif);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--color-paper-dark);
+    color: var(--color-ink-light);
+    font-family: var(--font-primary-body);
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  h1, h2, h3, h4, h5, h6, button, .handwritten {
-    font-family: var(--font-handwritten);
+  h1, h2, h3, h4, h5, h6, button, .font-heading {
+    font-family: var(--font-primary-heading);
+  }
+  
+  .font-serif {
+    font-family: var(--font-primary-body);
   }
 }
 
 @layer components {
-  .paper-texture {
-    background-color: var(--background);
-    position: relative;
-    isolation: isolate;
-  }
-
-  .paper-texture::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    opacity: 0.03;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: -1;
-  }
-
-  .paper-shadow {
-    box-shadow:
-      0 1px 1px rgba(0,0,0,0.05),
-      0 2px 2px rgba(0,0,0,0.05),
-      0 4px 4px rgba(0,0,0,0.05),
-      0 8px 8px rgba(0,0,0,0.05);
-  }
-
-  .tape-corner {
-    position: absolute;
-    top: -6px;
-    left: -23px;
-    width: 60px;
-    height: 20px;
-    background-color: rgba(235, 228, 208, 0.8);
-    transform: rotate(-45deg);
-    z-index: 20;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
-    backdrop-filter: blur(1px);
-    pointer-events: none;
-    border-left: 1px dashed rgba(0,0,0,0.1);
-    border-right: 1px dashed rgba(0,0,0,0.1);
-    opacity: 0.4;
-  }
-
-  .tape-corner-br {
-    position: absolute;
-    bottom: -5px;
-    right: -23px;
-    width: 60px;
-    height: 20px;
-    background-color: rgba(235, 228, 208, 0.8);
-    transform: rotate(-45deg);
-    z-index: 20;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
-    backdrop-filter: blur(1px);
-    pointer-events: none;
-    border-left: 1px dashed rgba(0,0,0,0.1);
-    border-right: 1px dashed rgba(0,0,0,0.1);
-    opacity: 0.4;
-  }
-
+  /* Keep existing component styles */
   .paper-card {
-    @apply bg-[var(--paper-warm)] rounded-xl p-6 transition-transform hover:scale-[1.01] duration-300;
-    box-shadow:pi.de
-      0 1px 1px rgba(0,0,0,0.05),
-      0 2px 2px rgba(0,0,0,0.05),
-      0 4px 4px rgba(0,0,0,0.05),
-      0 8px 8px rgba(0,0,0,0.05);
+    @apply bg-[var(--color-paper-warm-dark)] rounded-xl p-6 transition-transform hover:scale-[1.01] duration-300;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   }
-
-  .btn-primary {
-    @apply px-5 py-2 rounded-full border border-[var(--sage-dried)] hover:bg-[var(--sage-fresh)] hover:text-white transition-colors duration-200 font-bold text-lg cursor-pointer;
-    font-family: var(--font-handwritten);
-  }
-
-  .status-strip {
-    @apply border-l-4 pl-4;
-  }
-}
-
-@layer utilities {
-  .border-planted { border-color: var(--planted); }
-  .border-sprouting { border-color: var(--sprouting); }
-  .border-growing { border-color: var(--growing); }
-  .border-tree { border-color: var(--tree); }
-
-  .bg-planted { background-color: var(--planted); }
-  .bg-sprouting { background-color: var(--sprouting); }
-  .bg-growing { background-color: var(--growing); }
-  .bg-tree { background-color: var(--tree); }
-
-  .text-planted { color: var(--planted); }
-  .text-sprouting { color: var(--sprouting); }
-  .text-growing { color: var(--growing); }
-  .text-tree { color: var(--tree); }
 }

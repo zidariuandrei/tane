@@ -1,0 +1,40 @@
+services:
+  app:
+    image: oven/bun:latest
+    command: sleep infinity
+    volumes:
+      - ..:/workspace:cached
+    working_dir: /workspace
+    environment:
+      - SEARXNG_URL=http://searxng:8080
+      - NODE_ENV=development
+    ports:
+      - "5173:5173"
+    networks:
+      - tane-net
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    tty: true
+
+  searxng:
+    image: searxng/searxng:latest
+    environment:
+      - SEARXNG_BASE_URL=http://localhost:8080/
+    volumes:
+      - ./searxng/settings.yml:/etc/searxng/settings.yml:ro
+    ports:
+      - "8080:8080"
+    networks:
+      - tane-net
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+      - DAC_OVERRIDE
+
+networks:
+  tane-net:
+    driver: bridge

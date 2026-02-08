@@ -10,6 +10,7 @@ Tane is an AI-powered startup idea validator. Users plant a "seed" (idea), and T
 - **Action**: User types an idea (e.g., "Uber for dog walking").
 - **Backend**: Creates a `Seed` record in SQLite.
 - **Feedback**: Immediate redirection to the "Growth" (Status) page.
+- **Status**: ✅ **Done**
 
 ### 2. The Growth Process (Research Agent)
 - **Technology**: `@mariozechner/pi-coding-agent` embedded SDK.
@@ -22,11 +23,13 @@ Tane is an AI-powered startup idea validator. Users plant a "seed" (idea), and T
 - **Tools**:
   - `web_search`: Custom tool injected into Pi session.
   - `fetch_page`: Tool to read content of specific URLs (optional, for deep dive).
+- **Status**: ⏳ **Pending** (Backend logic missing)
 
 ### 3. Real-time Feedback (Status)
 - **UI**: A "Status Page" for a specific Seed.
 - **Mechanism**: Polling or SSE (Server-Sent Events).
 - **States**: `queued` -> `researching` (with detailed logs like "Searching for competitors...") -> `completed` -> `failed`.
+- **Status**: ✅ **Done** (UI handles states, backend pending)
 
 ### 4. Harvest (Report View)
 - **UI**: Beautiful Markdown rendering of the final report.
@@ -35,14 +38,15 @@ Tane is an AI-powered startup idea validator. Users plant a "seed" (idea), and T
   - Market Analysis.
   - Competitors.
   - Strategic Advice.
+- **Status**: ✅ **Done**
 
 ## Roadmap (MVP)
-1.  **Project Scaffolding**: Bun + SvelteKit + Tailwind v4 + shadcn-svelte.
-2.  **Database**: Setup `bun:sqlite` with schema (`seeds`, `reports`).
-3.  **UI Implementation**: Home page and Result page skeleton.
-4.  **Agent Integration**: Setup Pi SDK with a `search` tool.
-5.  **Queue System**: Simple `setInterval` loop in `hooks.server.ts` to process seeds.
-6.  **Polishing**: Transitions, loading states, error handling.
+1.  **Project Scaffolding**: Bun + SvelteKit + Tailwind v4 + shadcn-svelte. ✅ **Done**
+2.  **Database**: Setup `bun:sqlite` with schema (`seeds`, `reports`). ✅ **Done**
+3.  **UI Implementation**: Home page and Result page skeleton. ✅ **Done**
+4.  **Agent Integration**: Setup Pi SDK with a `search` tool. ⏳ **Pending**
+5.  **Queue System**: Simple `setInterval` loop in `hooks.server.ts` to process seeds. ⏳ **Pending**
+6.  **Polishing**: Transitions, loading states, error handling. ✅ **Done**
 
 ## Lessons Learned & Applied
 - **Persistence**: Using SQLite for the queue ensures we don't lose tasks on restart.
