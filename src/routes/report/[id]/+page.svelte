@@ -8,11 +8,12 @@ import SeedIcon from '$lib/components/SeedIcon.svelte';
 
 let { data } = $props();
 
-const { seed, report } = data;
+let seed = $derived(data.seed);
+let report = $derived(data.report);
 
 // Parse markdown on the client side to avoid hydration mismatches if possible, 
 // or use simple sync parsing. Marked is sync by default.
-const parsedContent = report ? marked.parse(report.content) : '';
+let parsedContent = $derived(report ? marked.parse(report.content) : '');
 </script>
 
 <div class="min-h-screen bg-[var(--color-paper-dark)] text-[var(--color-ink-light)] font-serif p-8 md:p-12 lg:p-24 flex justify-center">

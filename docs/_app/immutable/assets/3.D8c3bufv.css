@@ -1,0 +1,1 @@
+body{background-color:var(--color-paper-dark)}@keyframes svelte-1jq6khg-pulse-slow{0%,to{opacity:.04;transform:scale(1)}50%{opacity:.08;transform:scale(1.1)}}.animate-pulse-slow.svelte-1jq6khg{animation:svelte-1jq6khg-pulse-slow 8s ease-in-out infinite}

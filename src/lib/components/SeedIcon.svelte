@@ -35,7 +35,7 @@
   let { type, status, class: className = '' } = $props<Props>();
 
   // Normalizing type to ensure fallback
-  const plantType = ['pine', 'sakura', 'bamboo', 'fern', 'oak'].includes(type) ? type : 'pine';
+  let plantType = $derived(['pine', 'sakura', 'bamboo', 'fern', 'oak'].includes(type) ? type : 'pine');
 </script>
 
 <!-- Withered/Failed State -->
