@@ -1,41 +1,39 @@
 <script lang="ts">
-  import PineSeed from './icons/PineSeed.svelte';
-  import PineSprout from './icons/PineSprout.svelte';
-  import PineSapling from './icons/PineSapling.svelte';
-  import PineTree from './icons/PineTree.svelte';
+import BambooSapling from './icons/BambooSapling.svelte';
+import BambooSeed from './icons/BambooSeed.svelte';
+import BambooSprout from './icons/BambooSprout.svelte';
+import BambooTree from './icons/BambooTree.svelte';
 
-  import SakuraSeed from './icons/SakuraSeed.svelte';
-  import SakuraSprout from './icons/SakuraSprout.svelte';
-  import SakuraSapling from './icons/SakuraSapling.svelte';
-  import SakuraTree from './icons/SakuraTree.svelte';
+import Branch from './icons/Branch.svelte'; // For failed/withered
+import FernSapling from './icons/FernSapling.svelte';
+import FernSeed from './icons/FernSeed.svelte';
+import FernSprout from './icons/FernSprout.svelte';
+import FernTree from './icons/FernTree.svelte';
+import OakSapling from './icons/OakSapling.svelte';
+import OakSeed from './icons/OakSeed.svelte';
+import OakSprout from './icons/OakSprout.svelte';
+import OakTree from './icons/OakTree.svelte';
+import PineSapling from './icons/PineSapling.svelte';
+import PineSeed from './icons/PineSeed.svelte';
+import PineSprout from './icons/PineSprout.svelte';
+import PineTree from './icons/PineTree.svelte';
+import SakuraSapling from './icons/SakuraSapling.svelte';
+import SakuraSeed from './icons/SakuraSeed.svelte';
+import SakuraSprout from './icons/SakuraSprout.svelte';
+import SakuraTree from './icons/SakuraTree.svelte';
 
-  import BambooSeed from './icons/BambooSeed.svelte';
-  import BambooSprout from './icons/BambooSprout.svelte';
-  import BambooSapling from './icons/BambooSapling.svelte';
-  import BambooTree from './icons/BambooTree.svelte';
+interface Props {
+	type: string;
+	status: string;
+	class?: string;
+}
 
-  import FernSeed from './icons/FernSeed.svelte';
-  import FernSprout from './icons/FernSprout.svelte';
-  import FernSapling from './icons/FernSapling.svelte';
-  import FernTree from './icons/FernTree.svelte';
+let { type, status, class: className = '' }: Props = $props();
 
-  import OakSeed from './icons/OakSeed.svelte';
-  import OakSprout from './icons/OakSprout.svelte';
-  import OakSapling from './icons/OakSapling.svelte';
-  import OakTree from './icons/OakTree.svelte';
-  
-  import Branch from './icons/Branch.svelte'; // For failed/withered
-
-  interface Props {
-    type: string;
-    status: string;
-    class?: string;
-  }
-
-  let { type, status, class: className = '' } = $props<Props>();
-
-  // Normalizing type to ensure fallback
-  let plantType = $derived(['pine', 'sakura', 'bamboo', 'fern', 'oak'].includes(type) ? type : 'pine');
+// Normalizing type to ensure fallback
+let plantType = $derived(
+	['pine', 'sakura', 'bamboo', 'fern', 'oak'].includes(type) ? type : 'pine'
+);
 </script>
 
 <!-- Withered/Failed State -->

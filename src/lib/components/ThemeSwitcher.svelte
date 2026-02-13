@@ -1,23 +1,23 @@
 <script lang="ts">
-    import { theme, mode, type Theme, type Mode } from '$lib/stores/theme';
-    import { Sun, Moon, Palette, Check } from 'lucide-svelte';
-    import { fade, slide } from 'svelte/transition';
+import { Check, Moon, Palette, Sun } from 'lucide-svelte';
+import { fade, slide } from 'svelte/transition';
+import { type Mode, mode, type Theme, theme } from '$lib/stores/theme';
 
-    let isOpen = $state(false);
+let isOpen = $state(false);
 
-    const themes: { id: Theme; label: string; color: string }[] = [
-        { id: 'everforest', label: 'Everforest', color: '#a7c080' },
-        { id: 'gruvbox', label: 'Gruvbox', color: '#fe8019' },
-        { id: 'minimalist', label: 'Minimalist', color: '#10b981' }
-    ];
+const themes: { id: Theme; label: string; color: string }[] = [
+	{ id: 'everforest', label: 'Everforest', color: '#a7c080' },
+	{ id: 'gruvbox', label: 'Gruvbox', color: '#fe8019' },
+	{ id: 'minimalist', label: 'Minimalist', color: '#10b981' },
+];
 
-    function toggleMode() {
-        mode.update(m => m === 'dark' ? 'light' : 'dark');
-    }
+function toggleMode() {
+	mode.update((m) => (m === 'dark' ? 'light' : 'dark'));
+}
 
-    function selectTheme(t: Theme) {
-        theme.set(t);
-    }
+function selectTheme(t: Theme) {
+	theme.set(t);
+}
 </script>
 
 <div class="fixed top-4 right-4 z-50 flex flex-col items-end">

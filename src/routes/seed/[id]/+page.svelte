@@ -1,66 +1,62 @@
 <script lang="ts">
-  import { invalidateAll } from '$app/navigation';
-  import { onMount } from 'svelte';
-  import { marked } from 'marked';
-  import { fade, fly } from 'svelte/transition';
-  import SeedMenu from '$lib/components/SeedMenu.svelte';
-  import Branch from '$lib/components/icons/Branch.svelte';
-  
-  // Plant Icons
-  import PineSeed from '$lib/components/icons/PineSeed.svelte';
-  import PineSprout from '$lib/components/icons/PineSprout.svelte';
-  import PineSapling from '$lib/components/icons/PineSapling.svelte';
-  import PineTree from '$lib/components/icons/PineTree.svelte';
+import { marked } from 'marked';
+import { onMount } from 'svelte';
+import { fade, fly } from 'svelte/transition';
+import { invalidateAll } from '$app/navigation';
+import BambooSapling from '$lib/components/icons/BambooSapling.svelte';
+import BambooSeed from '$lib/components/icons/BambooSeed.svelte';
+import BambooSprout from '$lib/components/icons/BambooSprout.svelte';
+import BambooTree from '$lib/components/icons/BambooTree.svelte';
+import Branch from '$lib/components/icons/Branch.svelte';
+import FernSapling from '$lib/components/icons/FernSapling.svelte';
+import FernSeed from '$lib/components/icons/FernSeed.svelte';
+import FernSprout from '$lib/components/icons/FernSprout.svelte';
+import FernTree from '$lib/components/icons/FernTree.svelte';
+import OakSapling from '$lib/components/icons/OakSapling.svelte';
+import OakSeed from '$lib/components/icons/OakSeed.svelte';
+import OakSprout from '$lib/components/icons/OakSprout.svelte';
+import OakTree from '$lib/components/icons/OakTree.svelte';
+import PineSapling from '$lib/components/icons/PineSapling.svelte';
 
-  import OakSeed from '$lib/components/icons/OakSeed.svelte';
-  import OakSprout from '$lib/components/icons/OakSprout.svelte';
-  import OakSapling from '$lib/components/icons/OakSapling.svelte';
-  import OakTree from '$lib/components/icons/OakTree.svelte';
+// Plant Icons
+import PineSeed from '$lib/components/icons/PineSeed.svelte';
+import PineSprout from '$lib/components/icons/PineSprout.svelte';
+import PineTree from '$lib/components/icons/PineTree.svelte';
+import SakuraSapling from '$lib/components/icons/SakuraSapling.svelte';
+import SakuraSeed from '$lib/components/icons/SakuraSeed.svelte';
+import SakuraSprout from '$lib/components/icons/SakuraSprout.svelte';
+import SakuraTree from '$lib/components/icons/SakuraTree.svelte';
+import SeedMenu from '$lib/components/SeedMenu.svelte';
 
-  import BambooSeed from '$lib/components/icons/BambooSeed.svelte';
-  import BambooSprout from '$lib/components/icons/BambooSprout.svelte';
-  import BambooSapling from '$lib/components/icons/BambooSapling.svelte';
-  import BambooTree from '$lib/components/icons/BambooTree.svelte';
+let { data } = $props();
+let seed = $derived(data.seed);
+let report = $derived(data.report);
 
-  import SakuraSeed from '$lib/components/icons/SakuraSeed.svelte';
-  import SakuraSprout from '$lib/components/icons/SakuraSprout.svelte';
-  import SakuraSapling from '$lib/components/icons/SakuraSapling.svelte';
-  import SakuraTree from '$lib/components/icons/SakuraTree.svelte';
+const plantIcons = {
+	pine: { seed: PineSeed, sprout: PineSprout, sapling: PineSapling, tree: PineTree },
+	oak: { seed: OakSeed, sprout: OakSprout, sapling: OakSapling, tree: OakTree },
+	bamboo: { seed: BambooSeed, sprout: BambooSprout, sapling: BambooSapling, tree: BambooTree },
+	sakura: { seed: SakuraSeed, sprout: SakuraSprout, sapling: SakuraSapling, tree: SakuraTree },
+	fern: { seed: FernSeed, sprout: FernSprout, sapling: FernSapling, tree: FernTree },
+};
 
-  import FernSeed from '$lib/components/icons/FernSeed.svelte';
-  import FernSprout from '$lib/components/icons/FernSprout.svelte';
-  import FernSapling from '$lib/components/icons/FernSapling.svelte';
-  import FernTree from '$lib/components/icons/FernTree.svelte';
-  
-  let { data } = $props();
-  let seed = $derived(data.seed);
-  let report = $derived(data.report);
+let icons = $derived(plantIcons[seed.plant_type as keyof typeof plantIcons] || plantIcons.pine);
 
-  const plantIcons = {
-      pine: { seed: PineSeed, sprout: PineSprout, sapling: PineSapling, tree: PineTree },
-      oak: { seed: OakSeed, sprout: OakSprout, sapling: OakSapling, tree: OakTree },
-      bamboo: { seed: BambooSeed, sprout: BambooSprout, sapling: BambooSapling, tree: BambooTree },
-      sakura: { seed: SakuraSeed, sprout: SakuraSprout, sapling: SakuraSapling, tree: SakuraTree },
-      fern: { seed: FernSeed, sprout: FernSprout, sapling: FernSapling, tree: FernTree }
-  };
+// Polling for updates if not completed
+onMount(() => {
+	if (seed.status === 'pending' || seed.status === 'processing') {
+		const interval = setInterval(() => {
+			invalidateAll();
+			if (seed.status === 'completed' || seed.status === 'failed') {
+				clearInterval(interval);
+			}
+		}, 1000);
+		return () => clearInterval(interval);
+	}
+});
 
-  let icons = $derived(plantIcons[seed.plant_type as keyof typeof plantIcons] || plantIcons.pine);
-
-  // Polling for updates if not completed
-  onMount(() => {
-    if (seed.status === 'pending' || seed.status === 'processing') {
-      const interval = setInterval(() => {
-        invalidateAll();
-        if (seed.status === 'completed' || seed.status === 'failed') {
-          clearInterval(interval);
-        }
-      }, 1000);
-      return () => clearInterval(interval);
-    }
-  });
-
-  // Render markdown safely
-  let renderedReport = $derived(report ? marked(report.content) : '');
+// Render markdown safely
+let renderedReport = $derived(report ? marked(report.content) : '');
 </script>
 
 <div class="min-h-screen p-6 md:p-12 night-theme flex flex-col items-center overflow-x-hidden w-full" style="background-color: var(--color-paper-dark); color: var(--color-ink-light);">
@@ -183,7 +179,5 @@
   }
 
   /* SVG positioning tweak */
-  .fixed-svg-container {
-      /* Ensure it stays within the relative container but allows overflow if needed */
-  }
+  /* .fixed-svg-container {} */
 </style>

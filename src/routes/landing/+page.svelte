@@ -1,30 +1,32 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { fade, fly } from 'svelte/transition';
-  import { cubicOut } from 'svelte/easing';
-  
-  // Icons
-  import PineSeed from '$lib/components/icons/PineSeed.svelte';
-  import PineSprout from '$lib/components/icons/PineSprout.svelte';
-  import PineTree from '$lib/components/icons/PineTree.svelte';
-  import Branch from '$lib/components/icons/Branch.svelte';
-  
-  // State
-  let mounted = $state(false);
-  let scrollY = $state(0);
-  let innerHeight = $state(0);
+import { onMount } from 'svelte';
+import { cubicOut } from 'svelte/easing';
+import { fade, fly } from 'svelte/transition';
+import Branch from '$lib/components/icons/Branch.svelte';
 
-  onMount(() => {
-    mounted = true;
-    const updateScroll = () => { scrollY = window.scrollY; };
-    window.addEventListener('scroll', updateScroll, { passive: true });
-    return () => window.removeEventListener('scroll', updateScroll);
-  });
-  
-  // Parallax helper
-  function parallax(speed: number) {
-    return `transform: translateY(${scrollY * speed}px)`;
-  }
+// Icons
+import PineSeed from '$lib/components/icons/PineSeed.svelte';
+import PineSprout from '$lib/components/icons/PineSprout.svelte';
+import PineTree from '$lib/components/icons/PineTree.svelte';
+
+// State
+let mounted = $state(false);
+let scrollY = $state(0);
+let innerHeight = $state(0);
+
+onMount(() => {
+	mounted = true;
+	const updateScroll = () => {
+		scrollY = window.scrollY;
+	};
+	window.addEventListener('scroll', updateScroll, { passive: true });
+	return () => window.removeEventListener('scroll', updateScroll);
+});
+
+// Parallax helper
+function parallax(speed: number) {
+	return `transform: translateY(${scrollY * speed}px)`;
+}
 </script>
 
 <svelte:window bind:innerHeight />

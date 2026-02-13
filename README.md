@@ -4,6 +4,8 @@
 
 **Tane** (Japanese for *Seed*) is an AI-powered incubator that helps you validate startup ideas before you write a single line of code. It acts as the "Chief Product Officer" in your AI co-founding team.
 
+![Tane Screenshot](https://via.placeholder.com/1200x600?text=Tane+Screenshot+Placeholder)
+
 ## 🌿 The Concept
 
 In Tane, ideas are treated like seeds.
@@ -11,86 +13,95 @@ In Tane, ideas are treated like seeds.
 2.  **Grow**: An autonomous AI agent researches the market, analyzes competitors, and identifies risks.
 3.  **Harvest**: You receive a structured **Validation Report**—a document that tells you *why* (or why not) you should build this.
 
-## 🚀 The "Generative Pipeline" Vision
-
-Tane is **Phase 1** of a larger ecosystem designed to build software autonomously:
-
-1.  **Phase 1: Tane (Ideation)** 🟢 *Current*
-    *   Input: Abstract Idea.
-    *   Output: `validation.md` (Market Research & Core Value Prop).
-    *   *Agent Personality:* Creative, inquisitive, critical.
-
-2.  **Phase 2: Zu. (Architecture)** 🔵 *Planned*
-    *   Input: Tane's Validation Report.
-    *   Output: `blueprint.json` (DB Schema, API Spec, UI Flows).
-    *   *Agent Personality:* Structural, logical, precise.
-
-3.  **Phase 3: The Factory (Execution)** 🔴 *Planned*
-    *   Input: Zu's Blueprint.
-    *   Output: Production Code (`src/`).
-    *   *Agent Personality:* Efficient, task-oriented.
-
-## 🛠 Tech Stack
-
-Built for speed and beauty using the modern web stack:
-
-*   **Framework**: [SvelteKit](https://kit.svelte.dev/) (Svelte 5 Runes)
-*   **Runtime**: [Bun](https://bun.sh/)
-*   **Database**: SQLite (via `bun:sqlite`)
-*   **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
-*   **Design System**: "Herbarium" (Custom CSS Variables for theming)
-*   **AI Engine**: [@mariozechner/pi-coding-agent](https://github.com/mariozechner/pi-coding-agent)
-
-## 🎨 The "Herbarium" Design System
-
-Tane features a unique aesthetic inspired by botanical journals and pressed plants.
-*   **Fonts**: *Caveat* (Handwritten) & *Crimson Text* (Serif).
-*   **Theme**: Deep organic greens, paper textures, and warm earth tones.
-*   **Philosophy**: "Digital Gardening"—slow, thoughtful, organic growth.
+## 🚀 Features
+- **Botanical Design System**: A unique "Herbarium" aesthetic with organic textures and paper feel.
+- **Autonomous Research Agent**: Powered by `@mariozechner/pi-coding-agent`, Tane performs deep web research using your preferred LLM.
+- **Model Agnostic**: Automatically detects and uses models configured in your Pi environment (OpenAI, Anthropic, Gemini, Z.ai, etc.).
+- **Local-First**: Data is stored in a local SQLite database (`tane.sqlite`) for privacy and speed.
 
 ## ⚡ Quick Start
 
 ### Prerequisites
-*   [Bun](https://bun.sh/) (v1.1+)
-*   An LLM Provider Key (Anthropic/OpenAI) configured in your environment.
+- **[Bun](https://bun.sh/)** (v1.1+)
+- **Pi Agent Configuration**: Tane uses the Pi Agent SDK to discover models and keys.
 
-### Installation
+### 1. Installation
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/yourusername/tane.git
+# Clone the repository
+git clone https://github.com/zidariuandrei/tane.git
 cd tane
 
-# 2. Install dependencies
+# Install dependencies
 bun install
-
-# 3. Initialize the database
-# (Happens automatically on first run via hooks.server.ts)
-
-# 4. Start the development server
-bun dev
 ```
 
-## 📂 Project Structure
+### 2. Configuration (API Keys)
 
-```text
-/src
-├── lib/
-│   ├── components/    # UI Components (SeedCard, ResearchButton)
-│   ├── server/        # Backend Logic (Database, AI Agent)
-│   └── styles/        # Tailwind & Herbarium Theme
-├── routes/            # SvelteKit Pages
-│   ├── +page.svelte   # The Garden (Dashboard)
-│   └── seed/[id]/     # The Report (Harvest View)
-└── app.css            # Global Theme Variables
+Tane looks for API keys in two places:
+1.  **Pi Config (Recommended)**: `~/.pi/agent/auth.json`. If you already use `pi`, Tane will automatically detect your configured models.
+2.  **Environment Variables**: You can set keys directly in a `.env` file for specific providers.
+
+**Example `.env`:**
+```bash
+# Optional: Explicit keys if not using ~/.pi/agent/auth.json
+ZAI_API_KEY=your_z_ai_key
+GOOGLE_API_KEY=your_gemini_key
+OPENAI_API_KEY=your_openai_key
 ```
 
-## 🤝 Contributing
+### 3. Running Tane
 
-This project is an experiment in **Agentic Workflow**.
-*   We use `bi` (Bun Install) and `bv` (Bun Vite).
-*   We prefer **Composition over Inheritance**.
-*   We treat **Documentation as Code** (see `DESIGN_SYSTEM.md`).
+```bash
+# Start the development server
+bun run dev
+```
+
+Open your browser to `http://localhost:5173`.
+- **/**: The App (Plant seeds, view reports).
+- **/landing**: The Marketing/Showcase page.
+
+## 🏗 Architecture & Development
+
+### The Stack
+- **Framework**: SvelteKit (Svelte 5 Runes)
+- **Runtime**: Bun
+- **Database**: SQLite (`bun:sqlite`)
+- **Agent SDK**: `@mariozechner/pi-coding-agent`
+
+### The "Gardener" (Background Worker)
+Tane uses a simple polling mechanism in `src/hooks.server.ts` to check for pending seeds.
+1.  When a seed is planted, it is saved with `status: pending` and your selected `model`.
+2.  The background worker (`Gardener.grow`) picks it up.
+3.  It instantiates a **Headless Pi Agent**.
+4.  The agent performs web searches and synthesizes a Markdown report.
+5.  The report is saved to the `reports` table.
+
+### Model Selection
+Tane dynamically lists models available in your environment.
+- It queries the `ModelRegistry` from the Pi SDK.
+- It filters for models that have valid authentication.
+- The default selection is the **last** model in the list (usually the most capable/SOTA).
+
+## 🚢 Deployment
+
+### Static Landing Page (GitHub Pages)
+To deploy the `/landing` page as a static site:
+```bash
+# Builds the app and copies static assets to /docs
+./publish-landing.sh
+```
+Then commit the `docs/` folder and enable GitHub Pages in your repository settings.
+
+### Full Application (Self-Hosted)
+To run the full app with the database and agent:
+1.  **Docker**: Use the provided `Dockerfile` (create one based on `oven/bun`).
+2.  **VPS**: Deploy to a VPS (Hetzner, DigitalOcean).
+3.  **Volume**: Mount a volume for `tane.sqlite` and `~/.pi/agent/` to persist data and auth.
+
+**Note**: Serverless platforms (Vercel/Netlify) are **NOT supported** for the full app because:
+1.  The agent requires long-running processes (1-3 mins).
+2.  `bun:sqlite` requires a persistent filesystem.
 
 ---
 

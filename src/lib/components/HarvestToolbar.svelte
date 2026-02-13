@@ -1,32 +1,32 @@
 <script lang="ts">
-  import { fade } from 'svelte/transition';
-  import { Copy, Download, Archive } from 'lucide-svelte';
+import { Archive, Copy, Download } from 'lucide-svelte';
+import { fade } from 'svelte/transition';
 
-  let { markdown, seedId, topic } = $props<{ 
-    markdown: string;
-    seedId: string;
-    topic: string;
-  }>();
+let { markdown, seedId, topic } = $props<{
+	markdown: string;
+	seedId: string;
+	topic: string;
+}>();
 
-  let copied = $state(false);
+let copied = $state(false);
 
-  function copyToClipboard() {
-    navigator.clipboard.writeText(markdown);
-    copied = true;
-    setTimeout(() => (copied = false), 2000);
-  }
+function copyToClipboard() {
+	navigator.clipboard.writeText(markdown);
+	copied = true;
+	setTimeout(() => { copied = false; }, 2000);
+}
 
-  function downloadMarkdown() {
-    const blob = new Blob([markdown], { type: 'text/markdown' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `tane-report-${topic.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.md`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }
+function downloadMarkdown() {
+	const blob = new Blob([markdown], { type: 'text/markdown' });
+	const url = URL.createObjectURL(blob);
+	const a = document.createElement('a');
+	a.href = url;
+	a.download = `tane-report-${topic.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.md`;
+	document.body.appendChild(a);
+	a.click();
+	document.body.removeChild(a);
+	URL.revokeObjectURL(url);
+}
 </script>
 
 <div class="flex flex-wrap items-center justify-center gap-1 p-2 bg-[var(--paper-warm-dark)] shadow-[2px_2px_10px_rgba(0,0,0,0.2)] rounded-lg border border-[var(--sepia-dark)]/30 rotate-1 transition-transform hover:rotate-0 duration-300" transition:fade>

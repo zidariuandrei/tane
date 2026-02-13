@@ -1,33 +1,42 @@
 <script lang="ts">
+import { onMount } from 'svelte';
 import { fade } from 'svelte/transition';
 import { enhance } from '$app/forms';
 import { invalidateAll } from '$app/navigation';
-import { onMount } from 'svelte';
+import PineSeed from '$lib/components/icons/PineSeed.svelte';
 import SeedIcon from '$lib/components/SeedIcon.svelte';
-import PineSeed from '$lib/components/icons/PineSeed.svelte'; 
 
 let { data, form } = $props();
 
 let activeFilter = $state('all');
 let seeds = $derived(data.seeds);
+let models = $derived(data.models || []);
+
+// Default to the last model (SOTA) when models are loaded
+let selectedModel = $state('');
+$effect(() => {
+	if (models.length > 0 && !selectedModel) {
+		selectedModel = models[models.length - 1].id;
+	}
+});
 
 let filteredSeeds = $derived(
-    activeFilter === 'all'
-        ? seeds
-        : seeds.filter((s) => {
-            if (activeFilter === 'planted') return s.status === 'pending';
-            if (activeFilter === 'sprouting') return s.status === 'processing';
-            if (activeFilter === 'harvested') return s.status === 'completed';
-            if (activeFilter === 'withered') return s.status === 'failed';
-            return true;
-        })
+	activeFilter === 'all'
+		? seeds
+		: seeds.filter((s) => {
+				if (activeFilter === 'planted') return s.status === 'pending';
+				if (activeFilter === 'sprouting') return s.status === 'processing';
+				if (activeFilter === 'harvested') return s.status === 'completed';
+				if (activeFilter === 'withered') return s.status === 'failed';
+				return true;
+			})
 );
 
 onMount(() => {
-    const interval = setInterval(() => {
-        invalidateAll();
-    }, 3000);
-    return () => clearInterval(interval);
+	const interval = setInterval(() => {
+		invalidateAll();
+	}, 3000);
+	return () => clearInterval(interval);
 });
 </script>
 
@@ -75,6 +84,29 @@ onMount(() => {
                 {form.error}
               </p>
             {/if}
+          </div>
+
+          <!-- Model Selector -->
+          <div class="flex items-center justify-end gap-3 text-sm font-serif opacity-60 hover:opacity-100 transition-opacity">
+               <label for="model" class="italic">Gardener:</label>
+               <div class="relative">
+                   <select bind:value={selectedModel} name="model" id="model" class="bg-transparent border-b border-[var(--sage-dried)] outline-none cursor-pointer text-[var(--sage-fresh)] appearance-none pr-6 py-1">
+                       {#each models as model}
+                           <option value={model.id} class="bg-[var(--color-paper-warm-dark)] text-[var(--color-ink-light)]">
+                               {model.name}
+                           </option>
+                       {/each}
+                       {#if models.length === 0}
+                           <option value="gpt-4o" disabled>No models available</option>
+                       {/if}
+                   </select>
+                   <!-- Custom Arrow -->
+                   <div class="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none">
+                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-[var(--sage-fresh)]">
+                           <path d="M6 9l6 6 6-6"/>
+                       </svg>
+                   </div>
+               </div>
           </div>
 
           <div class="flex justify-end">

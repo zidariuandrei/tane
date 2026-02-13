@@ -1,6 +1,6 @@
 import { error, redirect } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
-import type { PageServerLoad, Actions } from './$types';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { id } = params;
@@ -30,7 +30,7 @@ export const load: PageServerLoad = async ({ params }) => {
 
 		return {
 			seed,
-			report
+			report,
 		};
 	} catch (err) {
 		console.error('Database error:', err);
@@ -52,7 +52,7 @@ export const actions: Actions = {
 			console.error('Delete error:', err);
 			return error(500, 'Failed to prune seed');
 		}
-		
+
 		throw redirect(303, '/');
-	}
+	},
 };

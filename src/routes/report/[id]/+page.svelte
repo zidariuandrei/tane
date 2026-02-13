@@ -1,17 +1,17 @@
 <script lang="ts">
 import { marked } from 'marked';
+import { onMount } from 'svelte';
 import { fade } from 'svelte/transition';
 import { enhance } from '$app/forms';
-import { onMount } from 'svelte';
-import SeedMenu from '$lib/components/SeedMenu.svelte';
 import SeedIcon from '$lib/components/SeedIcon.svelte';
+import SeedMenu from '$lib/components/SeedMenu.svelte';
 
 let { data } = $props();
 
 let seed = $derived(data.seed);
 let report = $derived(data.report);
 
-// Parse markdown on the client side to avoid hydration mismatches if possible, 
+// Parse markdown on the client side to avoid hydration mismatches if possible,
 // or use simple sync parsing. Marked is sync by default.
 let parsedContent = $derived(report ? marked.parse(report.content) : '');
 </script>

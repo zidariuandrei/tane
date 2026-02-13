@@ -1,0 +1,10 @@
+node_modules
+.svelte-kit
+build
+dist
+docs
+test-gardener.ts
+publish-landing.sh
+debug-models.ts
+*.d.ts
+src/app.css
